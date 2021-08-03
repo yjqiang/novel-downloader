@@ -23,25 +23,4 @@
         </ul>
     </div>
 </body>
-<script>
-    # https://stackoverflow.com/questions/55746925/return-a-value-from-settimeout
-    const waitAndGetHtml = delay => new Promise(
-        resolve => setTimeout(
-            () => resolve(document.documentElement.outerHTML),
-            delay)
-    );
-    const test = async () => {
-        let last_html = document.documentElement.outerHTML;
-        let cur_html;
-        while (true) {
-            cur_html = await waitAndGetHtml(3000);
-            console.log('CHECKING!');
-            if (last_html === cur_html)
-                break;
-            last_html = cur_html;
-        }
-        console.log('DONE!');
-    }
-    test();
-</script>
 </html>
