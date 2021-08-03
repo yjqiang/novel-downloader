@@ -16,7 +16,7 @@ def is_fake_paragraph(last_word: str):
     :return:
     """
     # https://stackoverflow.com/questions/2718196/find-all-chinese-text-in-a-string-using-python-and-regex
-    return RE.fullmatch(last_word) or last_word in (',', '，')
+    return RE.fullmatch(last_word) or last_word in (',', '，', '、')
 
 
 def save_json(path: str, data: Any) -> None:
