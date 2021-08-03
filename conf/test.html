@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        img {
+          /*vertical-align: middle;*/
+            margin-bottom: -6px
+        }
+    </style>
+
+</head>
+<body>
+    <article>
+    </article>
+
+    <div class="jump">
+        <ul>
+            <li>
+                <a href="">下一页</a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    # https://stackoverflow.com/questions/55746925/return-a-value-from-settimeout
+    const waitAndGetHtml = delay => new Promise(
+        resolve => setTimeout(
+            () => resolve(document.documentElement.outerHTML),
+            delay)
+    );
+    const test = async () => {
+        let last_html = document.documentElement.outerHTML;
+        let cur_html;
+        while (true) {
+            cur_html = await waitAndGetHtml(3000);
+            console.log('CHECKING!');
+            if (last_html === cur_html)
+                break;
+            last_html = cur_html;
+        }
+        console.log('DONE!');
+    }
+    test();
+</script>
+</html>

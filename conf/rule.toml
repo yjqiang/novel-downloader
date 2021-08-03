@@ -1,0 +1,75 @@
+[[websites]]
+    netloc = "www.xbookcn.com"
+
+    # 空 就是 None
+    encoding = "big5"
+
+    # body_page 是正文获取规则
+    body_page.loader = 'aiohttp'
+    [websites.body_page.title]
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = 'div[class=title_page]'
+        kwargs.attributes = [['_get_text'],]  # 详见 parse_rule/lower_rule.LxmlCssSelectorRule
+
+    [[websites.body_page.content]]
+        type = 'BodyPageContentAiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = "div[class=content] > p"
+        kwargs.attributes = [['_get_content'],]
+
+    [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = 'a[href=index\.htm] + a'
+        kwargs.attributes = [['_get_attribute', 'href']]
+
+
+# http://m.haohengwx.com/16/16248/177341_2.html 有问题
+[[websites]]
+    netloc = "m.haohengwx.com"
+
+    body_page.loader = 'playwright'
+    [websites.body_page.title]
+        type = 'PlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = 'h1[id=chaptertitle]'
+        kwargs.attributes = [['_get_text'],]
+
+    [[websites.body_page.content]]
+        type = 'BodyPageContentPlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = "div[class=articlecontent] > div > p"
+        kwargs.attributes = [['_get_content_with_img', 'img', 'src'],]
+
+    [websites.body_page.content_other_settings]
+        try_combine_fake_paragraphs = true  # 不少小说网站乱切分自然段，这里根据每个“自然段”最后一个 word 尝试进行合并
+
+    [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
+        type = 'PlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = 'ul > li:nth-child(4) > a[href$=html]'
+        kwargs.attributes = [['_get_attribute', 'href']]
+
+
+[[websites]]
+    netloc = "www.hejixs.com"
+    encoding = "utf8"
+
+    body_page.loader = 'playwright'
+    [websites.body_page.title]
+        type = 'PlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = 'h1[class=page-title]'
+        kwargs.attributes = [['_get_text'],]
+
+    [[websites.body_page.content]]
+        type = 'BodyPageContentPlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = "div[id=content] > div > p"
+        kwargs.attributes = [['_get_content_with_img', 'img', 'src'],]
+
+    [websites.body_page.content_other_settings]
+        try_combine_fake_paragraphs = true  # 不少小说网站乱切分自然段，这里根据每个“自然段”最后一个 word 尝试进行合并
+
+    [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
+        type = 'PlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = 'center[class=chapterPages] > a[class=curr] + a'
+        kwargs.attributes = [['_get_attribute', 'href']]
+    [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
+        type = 'PlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = 'a[class=next]'
+        kwargs.attributes = [['_get_attribute', 'href']]
+
