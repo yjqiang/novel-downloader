@@ -3,9 +3,11 @@ import re
 from typing import Any
 
 import toml
+import opencc
 
 
 RE = re.compile(u'[⺀-⺙⺛-⻳⼀-⿕々〇〡-〩〸-〺〻㐀-䶵一-鿃豈-鶴侮-頻並-龎]', re.UNICODE)
+T2S_CONVERTER = opencc.OpenCC('t2s.json')
 
 
 def is_fake_paragraph(last_word: str):
@@ -37,3 +39,7 @@ def toml_load(path: str):
 def toml_dump(anything: Any, path):
     with open(path, 'w', encoding="utf-8") as f:
         toml.dump(anything, f)
+
+
+def traditional2simplified_chinese(words: str) -> str:
+    return T2S_CONVERTER.convert(words)

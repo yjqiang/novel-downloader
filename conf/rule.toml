@@ -2,7 +2,8 @@
     netloc = "www.xbookcn.com"
 
     # 空 就是 None
-    encoding = "big5"
+    # encoding = "big5"
+    traditional2simplified_chinese = true
 
     # body_page 是正文获取规则
     body_page.loader = 'aiohttp'

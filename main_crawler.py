@@ -6,6 +6,7 @@ import utils
 from config_loader import config_loader
 from my_dataclass.body_page import BodyPage
 from parse_rule.rule import WebsiteRule
+from my_dataclass.content import ContentWords
 
 
 async def main():
@@ -34,6 +35,12 @@ async def main():
         print(f'{body_page.next_page_url=}')
 
         session.set_state(body_page.web_content.page, True)  # 完事了
+
+        if rule.all_rules_of_1_website.get('traditional2simplified_chinese', False):
+            for paragraph in body_page.content:
+                for piece in paragraph.value:
+                    if isinstance(piece, ContentWords):
+                        piece.words = utils.traditional2simplified_chinese(piece.words)
 
         utils.save_json(f'data/{i}.json',
                         {
