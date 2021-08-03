@@ -1,0 +1,4 @@
+aiohttp==3.7.4.post0
+lxml==4.6.3
+playwright==1.13.1
+toml==0.10.2
