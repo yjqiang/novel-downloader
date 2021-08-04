@@ -5,7 +5,7 @@ from typing import Optional
 
 from lxml import html, cssselect
 
-from my_dataclass.body_page import WebContent
+from my_dataclass.base_page import RawPageData
 from parse_rule.base_low_rules import LxmlHtmlElementRule, BodyPageContentLxmlHtmlElementRule
 
 
@@ -18,14 +18,14 @@ class AiohttpLxmlHtmlElementRule(LxmlHtmlElementRule):
         super().__init__(str_pattern, attributes)
         self.css_selector_pattern = cssselect.CSSSelector(str_pattern)
 
-    async def find(self, web_content: WebContent) -> Optional[html.HtmlElement]:
-        result = self.css_selector_pattern(web_content.root)
+    async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
+        result = self.css_selector_pattern(raw_page_data.root)
         if result:
             return result[0]
         return None
 
-    async def findall(self, web_content: WebContent) -> list[html.HtmlElement]:
-        return self.css_selector_pattern(web_content.root)
+    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+        return self.css_selector_pattern(raw_page_data.root)
 
 
 class BodyPageContentAiohttpLxmlHtmlElementRule(BodyPageContentLxmlHtmlElementRule):
@@ -37,11 +37,11 @@ class BodyPageContentAiohttpLxmlHtmlElementRule(BodyPageContentLxmlHtmlElementRu
         super().__init__(str_pattern, attributes)
         self.css_selector_pattern = cssselect.CSSSelector(str_pattern)
 
-    async def find(self, web_content: WebContent) -> Optional[html.HtmlElement]:
-        result = self.css_selector_pattern(web_content.root)
+    async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
+        result = self.css_selector_pattern(raw_page_data.root)
         if result:
             return result[0]
         return None
 
-    async def findall(self, web_content: WebContent) -> list[html.HtmlElement]:
-        return self.css_selector_pattern(web_content.root)
+    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+        return self.css_selector_pattern(raw_page_data.root)

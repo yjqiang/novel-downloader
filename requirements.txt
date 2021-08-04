@@ -2,4 +2,6 @@ aiohttp==3.7.4.post0
 lxml==4.6.3
 playwright==1.13.1
 toml==0.10.2
+uvicorn==0.14.0
+fastapi==0.68.0
 opencc==1.1.1

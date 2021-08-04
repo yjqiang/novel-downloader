@@ -2,7 +2,7 @@ from typing import Optional, Any, Union
 
 from lxml import html
 
-from my_dataclass.body_page import WebContent
+from my_dataclass.base_page import RawPageData
 from my_dataclass.content import ContentParagraph, ContentWords, ContentImage
 
 
@@ -24,25 +24,25 @@ class LxmlHtmlElementRule:
     async def _get_text(root: html.HtmlElement) -> str:
         return root.text
 
-    async def find(self, web_content: WebContent) -> Optional[html.HtmlElement]:
+    async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
         pass
 
-    async def findall(self, web_content: WebContent) -> list[html.HtmlElement]:
+    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
         pass
 
-    async def find_attr(self, web_content: WebContent) -> Optional[list[Any]]:
+    async def find_attr(self, raw_page_data: RawPageData) -> Optional[list[Any]]:
         """
         self.attributes 设计目的：例如在目录页获取每个 index 的信息（url + 章节名），一般对同一个 element，element.get('href') 是 url，而 element.text 是章节名
-        :param web_content:
+        :param raw_page_data:
         :return:
         """
-        find_result = await self.find(web_content)
+        find_result = await self.find(raw_page_data)
         if find_result is None:
             return None
         return [await function(find_result, *kwargs_except_root) for function, *kwargs_except_root in self.attributes]
 
-    async def findall_attr(self, web_content: WebContent) -> list[list[Any]]:
-        find_results = await self.findall(web_content)
+    async def findall_attr(self, raw_page_data: RawPageData) -> list[list[Any]]:
+        find_results = await self.findall(raw_page_data)
         results = []
         for find_result in find_results:
             results.append([await function(find_result, *kwargs_except_root) for function, *kwargs_except_root in self.attributes])
@@ -153,11 +153,11 @@ class BodyPageContentLxmlHtmlElementRule:
 
         return new_paragraphs
 
-    async def findall(self, web_content: WebContent) -> list[html.HtmlElement]:
+    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
         pass
 
-    async def findall_attr(self, web_content: WebContent) -> list[ContentParagraph]:
-        find_results = await self.findall(web_content)
+    async def findall_attr(self, raw_page_data: RawPageData) -> list[ContentParagraph]:
+        find_results = await self.findall(raw_page_data)
         paragraphs = []
         for find_result in find_results:
             for function, *kwargs_except_root in self.attributes:

@@ -6,7 +6,9 @@
     traditional2simplified_chinese = true
 
     # body_page 是正文获取规则
-    body_page.loader = 'aiohttp'
+    [websites.body_page]
+        loader = 'aiohttp'
+
     [websites.body_page.title]
         type = 'AiohttpLxmlHtmlElementRule'
         kwargs.str_pattern = 'div[class=title_page]'
@@ -23,11 +25,27 @@
         kwargs.attributes = [['_get_attribute', 'href']]
 
 
-# http://m.haohengwx.com/16/16248/177341_2.html 有问题
+    # index_page 是目录获取规则
+    [websites.index_page]
+        loader = 'aiohttp'
+
+    [[websites.index_page.content]]  # 与正文页面统一
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = "div[class=TitleLinks] div[class=content] > a"
+        kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
+
+    [[websites.index_page.next_page_url]]  # 与正文页面统一
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = 'none[class=none]'  # 随便写的，这里没有下一页
+        kwargs.attributes = []
+
+
 [[websites]]
     netloc = "m.haohengwx.com"
 
-    body_page.loader = 'playwright'
+    [websites.body_page]
+        loader = 'playwright'
+
     [websites.body_page.title]
         type = 'PlaywrightLxmlHtmlElementRule'
         kwargs.str_pattern = 'h1[id=chaptertitle]'
@@ -47,11 +65,27 @@
         kwargs.attributes = [['_get_attribute', 'href']]
 
 
+    [websites.index_page]
+        loader = 'aiohttp'
+
+    [[websites.index_page.content]]  # 与正文页面统一
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = "ul[class=chapters] > li > a"
+        kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
+
+    [[websites.index_page.next_page_url]]  # 与正文页面统一
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = 'div[class=page] > a:nth-last-child(2)'
+        kwargs.attributes = [['_get_attribute', 'href']]
+
+
 [[websites]]
     netloc = "www.hejixs.com"
     encoding = "utf8"
 
-    body_page.loader = 'playwright'
+    [websites.body_page]
+        loader = 'playwright'
+
     [websites.body_page.title]
         type = 'PlaywrightLxmlHtmlElementRule'
         kwargs.str_pattern = 'h1[class=page-title]'
@@ -74,3 +108,15 @@
         kwargs.str_pattern = 'a[class=next]'
         kwargs.attributes = [['_get_attribute', 'href']]
 
+
+    [websites.index_page]
+        loader = 'playwright'
+
+    [[websites.index_page.content]]  # 与正文页面统一
+        type = 'PlaywrightLxmlHtmlElementRule'
+        kwargs.str_pattern = "div[class=container] > div:nth-child(9)  li > a"
+        kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
+
+    [[websites.index_page.next_page_url]]  # 与正文页面统一
+        type = 'PlaywrightClickRule'
+        kwargs.str_pattern = 'a[class=nextPage]'
