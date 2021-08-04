@@ -3,7 +3,7 @@ from urllib.parse import urljoin
 
 from my_dataclass.body_page import BodyPageData
 from my_dataclass.index_page import IndexPageData
-from my_dataclass.content import ContentParagraph, ContentWords
+from my_dataclass.content import ContentParagraph, ContentWords, ContentImage
 from parse_rule.rule import BodyPageRule, IndexPageRule, WebsiteSettingRule
 import utils
 
@@ -75,13 +75,18 @@ class BodyPageLoader:
 
                 if isinstance(cur_last_piece, ContentWords) and utils.is_fake_paragraph(cur_last_piece.words[-1]):
                     after_first_piece = paragraphs[i + 1].value[0]  # 后一个自然段的第一部分
-                    if isinstance(after_first_piece, ContentWords):  # 合并连在一起的 string
+                    if isinstance(after_first_piece, ContentWords):  # 合并连在一起的 string：把后一个自然段的第一部分（全是 str）附在本段的最后部分末尾，并删除后一个自然段的第一部分
                         paragraphs[i].value[-1].words = cur_last_piece.words + after_first_piece.words
                         paragraphs[i].value += paragraphs[i + 1].value[1:]
-                    else:
+                    else:  # 仅仅简单的合并两自然段
                         paragraphs[i].value += paragraphs[i + 1].value
 
                     paragraphs.pop(i + 1)
+                elif isinstance(cur_last_piece, ContentImage):  # 这里假设文字图不含标点符号
+                    # 仅仅简单的合并两自然段
+                    paragraphs[i].value += paragraphs[i + 1].value
+                    paragraphs.pop(i + 1)
+
         body_page.content = paragraphs
 
     @staticmethod
