@@ -8,7 +8,7 @@
 
 # 使用说明
 1. 请使用 **python 3.9+** 版本。
-2. 依赖包在 [requirements.txt](requirements.txt)，请使用 pip 安装即可。
+2. 依赖包在 [requirements.txt](requirements.txt)，使用 `pip install Package_name==version` 命令（例如 `pip install lxml==4.6.3`）安装即可。
 3. [main_crawler.py](main_crawler.py) 负责下载小说到本地。
 4. [main_reader.py](main_reader.py) 负责把本地小说展示出来（用网页浏览）。
 5. [conf/rule.toml](conf/rule.toml) 负责小说提取规则。
