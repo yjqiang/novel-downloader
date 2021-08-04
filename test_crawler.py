@@ -15,7 +15,8 @@ async def main():
 
     url = 'https://www.xbookcn.com/book/chest/1.htm'
     url = 'http://m.haohengwx.com/16/16248/177341.html'
-    # url = 'http://www.hejixs.com/113/113311/7150266_2.html'
+    url = 'http://www.hejixs.com/113/113311/7150270.html'
+    url = 'https://www.kunnu.com/zichuan/46250.htm'
     rule: WebsiteRule = rules[urlparse(url).netloc]
 
     session = dict_str_class.web_sessions[rule.all_rules_of_1_website['body_page']['loader']]()
@@ -55,9 +56,9 @@ async def main():
 
     url = 'https://www.xbookcn.com/book/chest/index.htm'
     url = 'http://m.haohengwx.com/16/16248/'
-    # url = 'http://www.hejixs.com/113/113311_1/'
+    url = 'http://www.hejixs.com/113/113311_1/'
+    url = 'https://www.kunnu.com/zichuan/'
     rule: WebsiteRule = rules[urlparse(url).netloc]
-    print(rule.website_setting_rule.headers)
 
     session = dict_str_class.web_sessions[rule.all_rules_of_1_website['index_page']['loader']]()
     await session.init()

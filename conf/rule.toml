@@ -120,3 +120,40 @@
     [[websites.index_page.next_page_url]]  # 与正文页面统一
         type = 'PlaywrightClickRule'
         kwargs.str_pattern = 'a[class=nextPage]'
+
+
+[[websites]]
+    netloc = "www.kunnu.com"
+    encoding = "utf8"
+
+    [websites.body_page]
+        loader = 'aiohttp'
+
+    [websites.body_page.title]
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = 'h1[id=nr_title]'
+        kwargs.attributes = [['_get_text'],]
+
+    [[websites.body_page.content]]
+        type = 'BodyPageContentAiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = "div[id=nr1]"
+        kwargs.attributes = [['_get_content'],]
+
+    [[websites.body_page.next_page_url]]
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = 'li[class=next] > a'
+        kwargs.attributes = [['_get_attribute', 'href']]
+
+
+    [websites.index_page]
+        loader = 'aiohttp'
+
+    [[websites.index_page.content]]  # 与正文页面统一
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = "div[class^=book-list]  li > a"
+        kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
+
+    [[websites.index_page.next_page_url]]  # 与正文页面统一
+        type = 'AiohttpLxmlHtmlElementRule'
+        kwargs.str_pattern = 'none[class=none]'  # 随便写的，这里没有下一页
+        kwargs.attributes = []
