@@ -1,8 +1,9 @@
 from typing import Union, Optional
 from dataclasses import dataclass
 
-from lxml import html
 from playwright.async_api import Page, ElementHandle
+
+from utils import etree_Element
 
 
 @dataclass
@@ -11,7 +12,7 @@ class RawPageData:
     底层未处理的数据，例如该网页的 HTML 等
     """
     str_html: Optional[str] = None  # 网页的 HTML
-    root: Optional[html.HtmlElement] = None  # 网页的 HTML 解析
+    root: Optional[etree_Element] = None  # 网页的 HTML 解析
     page: Optional[Page] = None  # playwright 的 page
     encoding: Optional[str] = None  # 编码
 

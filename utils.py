@@ -2,6 +2,8 @@ import json
 import re
 from typing import Any
 
+from lxml.etree import _Element
+
 import toml
 import opencc
 
@@ -43,3 +45,6 @@ def toml_dump(anything: Any, path):
 
 def traditional2simplified_chinese(words: str) -> str:
     return T2S_CONVERTER.convert(words)
+
+
+etree_Element = _Element  #

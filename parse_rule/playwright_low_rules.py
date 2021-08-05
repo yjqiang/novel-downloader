@@ -4,17 +4,18 @@ from lxml import html, etree
 from playwright.async_api import ElementHandle
 
 from my_dataclass.base_page import RawPageData
-from parse_rule.base_low_rules import HtmlElementRule, BodyPageContentHtmlElementRule
+from parse_rule.base_low_rules import ElementRule, BodyPageContentElementRule
+from utils import etree_Element
 
 
-async def _find(str_pattern: str, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
+async def _find(str_pattern: str, raw_page_data: RawPageData) -> Optional[etree_Element]:
     result = await raw_page_data.page.query_selector(str_pattern)
     if result is None or not await result.is_visible():
         return None
     return html.fromstring(await result.evaluate('element => element.outerHTML'), parser=etree.HTMLParser(remove_comments=True))
 
 
-async def _findall(str_pattern: str, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+async def _findall(str_pattern: str, raw_page_data: RawPageData) -> list[etree_Element]:
     find_result = await raw_page_data.page.query_selector_all(str_pattern)
     result = []
     for element in find_result:
@@ -23,25 +24,25 @@ async def _findall(str_pattern: str, raw_page_data: RawPageData) -> list[html.Ht
     return result
 
 
-class PlaywrightHtmlElementRule(HtmlElementRule):
+class PlaywrightElementRule(ElementRule):
     """
     利用 Playwright 的搜索
     """
-    async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
+    async def find(self, raw_page_data: RawPageData) -> Optional[etree_Element]:
         return await _find(self.str_pattern, raw_page_data)
 
-    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+    async def findall(self, raw_page_data: RawPageData) -> list[etree_Element]:
         return await _findall(self.str_pattern, raw_page_data)
 
 
-class BodyPageContentPlaywrightHtmlElementRule(BodyPageContentHtmlElementRule):
+class BodyPageContentPlaywrightElementRule(BodyPageContentElementRule):
     """
     利用 Playwright 的搜索
     """
-    async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
+    async def find(self, raw_page_data: RawPageData) -> Optional[etree_Element]:
         return await _find(self.str_pattern, raw_page_data)
 
-    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+    async def findall(self, raw_page_data: RawPageData) -> list[etree_Element]:
         return await _findall(self.str_pattern, raw_page_data)
 
 

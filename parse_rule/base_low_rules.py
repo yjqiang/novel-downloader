@@ -1,14 +1,13 @@
 from typing import Optional, Any, Union
 
-from lxml import html
-
 from my_dataclass.base_page import RawPageData
 from my_dataclass.content import ContentParagraph, ContentWords, ContentImage
+from utils import etree_Element
 
 
-class HtmlElementRule:
+class ElementRule:
     """
-    对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 html.HtmlElement） 再处理，获得 element 的 text 或者 attribute 值等
+    对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 etree_Element） 再处理，获得 element 的 text 或者 attribute 值等
     """
     def __init__(self, str_pattern: str, attributes: list[list[str]]):
         """
@@ -20,17 +19,17 @@ class HtmlElementRule:
         self.attributes = [[getattr(self, function_name), *kwargs_except_root] for function_name, *kwargs_except_root in attributes]
 
     @staticmethod
-    async def _get_attribute(root: html.HtmlElement, key: str) -> str:
+    async def _get_attribute(root: etree_Element, key: str) -> str:
         return root.get(key)
 
     @staticmethod
-    async def _get_text(root: html.HtmlElement) -> str:
+    async def _get_text(root: etree_Element) -> str:
         return root.text
 
-    async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
+    async def find(self, raw_page_data: RawPageData) -> Optional[etree_Element]:
         pass
 
-    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+    async def findall(self, raw_page_data: RawPageData) -> list[etree_Element]:
         pass
 
     async def find_attr(self, raw_page_data: RawPageData) -> Optional[list[Any]]:
@@ -52,9 +51,9 @@ class HtmlElementRule:
         return results
 
 
-class BodyPageContentHtmlElementRule:
+class BodyPageContentElementRule:
     """
-    对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 html.HtmlElement） 再处理，获得 element 的 text 或者 attribute 值等；这是专门为正文提取配备的
+    对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 etree_Element） 再处理，获得 element 的 text 或者 attribute 值等；这是专门为正文提取配备的
     正文提取的关键在于把所有的 tag 的 text 全部提取出来
     """
     def __init__(self, str_pattern: str, attributes: list[list[str]]):
@@ -67,7 +66,7 @@ class BodyPageContentHtmlElementRule:
         self.attributes = [[getattr(self, function_name), *kwargs_except_root] for function_name, *kwargs_except_root in attributes]
 
     @staticmethod
-    async def _get_content(root: html.HtmlElement) -> list[ContentParagraph]:
+    async def _get_content(root: etree_Element) -> list[ContentParagraph]:
         """
         br 会负责把各个自然段分割
         :param root:
@@ -90,7 +89,7 @@ class BodyPageContentHtmlElementRule:
         return result
 
     @staticmethod
-    async def _get_content_with_img(root: html.HtmlElement, tag_name: str, attr_name: str) -> list[ContentParagraph]:
+    async def _get_content_with_img(root: etree_Element, tag_name: str, attr_name: str) -> list[ContentParagraph]:
         """
         eg: http://m.haohengwx.com/16/16248/236927_3.html 有文字图
         br 会负责把各个自然段分割
@@ -157,7 +156,7 @@ class BodyPageContentHtmlElementRule:
 
         return new_paragraphs
 
-    async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+    async def findall(self, raw_page_data: RawPageData) -> list[etree_Element]:
         pass
 
     async def findall_attr(self, raw_page_data: RawPageData) -> list[ContentParagraph]:
