@@ -1,9 +1,10 @@
 # from logging import info as print
-import logging
 from typing import Tuple, Optional, Union
 
 # from lxml import cssselect, etree, html
 from playwright.async_api import async_playwright, Page, ElementHandle
+
+from log import logger
 
 
 class WebSession:
@@ -42,7 +43,7 @@ class WebSession:
                 await url.click()
 
         # 想 wait until page **稳定**下来，然后提取最终的 html
-        logging.info("START")
+        logger.info("START")
         last_html = '-1'
         while True:
             # # https://github.com/microsoft/playwright/issues/1115#issuecomment-791122240
@@ -74,7 +75,7 @@ class WebSession:
             if last_html == cur_html:
                 break
             last_html = cur_html
-        logging.info("DOWN")
+        logger.info("DOWN")
         # # 不知道为什么，page.query_selector_all 和 lxml 解析 content 结果几乎完全没关系
         # print(len(await page.query_selector_all('div[id=content] > div > p')))
         # root = html.fromstring(await page.evaluate('() => document.documentElement.outerHTML'), parser=etree.HTMLParser(encoding='utf-8', remove_comments=True))

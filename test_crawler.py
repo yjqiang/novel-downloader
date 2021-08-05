@@ -6,11 +6,9 @@ from config_loader import config_loader
 from my_dataclass.body_page import BodyPageData
 from my_dataclass.index_page import IndexPageData
 from parse_rule.rule import WebsiteRule
-import log
 
 
 async def main():
-    log.init()
     rules = {element['netloc']: WebsiteRule(element) for element in config_loader.rule['websites']}
 
     url = 'https://www.xbookcn.com/book/chest/1.htm'
