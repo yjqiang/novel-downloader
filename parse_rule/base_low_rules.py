@@ -6,7 +6,10 @@ from my_dataclass.base_page import RawPageData
 from my_dataclass.content import ContentParagraph, ContentWords, ContentImage
 
 
-class LxmlHtmlElementRule:
+class HtmlElementRule:
+    """
+    对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 html.HtmlElement） 再处理，获得 element 的 text 或者 attribute 值等
+    """
     def __init__(self, str_pattern: str, attributes: list[list[str]]):
         """
 
@@ -49,8 +52,9 @@ class LxmlHtmlElementRule:
         return results
 
 
-class BodyPageContentLxmlHtmlElementRule:
+class BodyPageContentHtmlElementRule:
     """
+    对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 html.HtmlElement） 再处理，获得 element 的 text 或者 attribute 值等；这是专门为正文提取配备的
     正文提取的关键在于把所有的 tag 的 text 全部提取出来
     """
     def __init__(self, str_pattern: str, attributes: list[list[str]]):

@@ -4,39 +4,45 @@ from lxml import html, etree
 from playwright.async_api import ElementHandle
 
 from my_dataclass.base_page import RawPageData
-from parse_rule.base_low_rules import LxmlHtmlElementRule, BodyPageContentLxmlHtmlElementRule
+from parse_rule.base_low_rules import HtmlElementRule, BodyPageContentHtmlElementRule
 
 
-class PlaywrightLxmlHtmlElementRule(LxmlHtmlElementRule):
+async def _find(str_pattern: str, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
+    result = await raw_page_data.page.query_selector(str_pattern)
+    if result is None or not await result.is_visible():
+        return None
+    return html.fromstring(await result.evaluate('element => element.outerHTML'), parser=etree.HTMLParser(remove_comments=True))
+
+
+async def _findall(str_pattern: str, raw_page_data: RawPageData) -> list[html.HtmlElement]:
+    find_result = await raw_page_data.page.query_selector_all(str_pattern)
+    result = []
+    for element in find_result:
+        if await element.is_visible():
+            result.append(html.fromstring(await element.evaluate('element => element.outerHTML'), parser=etree.HTMLParser(remove_comments=True)))
+    return result
+
+
+class PlaywrightHtmlElementRule(HtmlElementRule):
+    """
+    利用 Playwright 的搜索
+    """
     async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
-        result = await raw_page_data.page.query_selector(self.str_pattern)
-        if result is None or not await result.is_visible():
-            return None
-        return html.fromstring(await result.evaluate('element => element.outerHTML'), parser=etree.HTMLParser(remove_comments=True))
+        return await _find(self.str_pattern, raw_page_data)
 
     async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
-        find_result = await raw_page_data.page.query_selector_all(self.str_pattern)
-        result = []
-        for element in find_result:
-            if await element.is_visible():
-                result.append(html.fromstring(await element.evaluate('element => element.outerHTML'), parser=etree.HTMLParser(remove_comments=True)))
-        return result
+        return await _findall(self.str_pattern, raw_page_data)
 
 
-class BodyPageContentPlaywrightLxmlHtmlElementRule(BodyPageContentLxmlHtmlElementRule):
+class BodyPageContentPlaywrightHtmlElementRule(BodyPageContentHtmlElementRule):
+    """
+    利用 Playwright 的搜索
+    """
     async def find(self, raw_page_data: RawPageData) -> Optional[html.HtmlElement]:
-        result = await raw_page_data.page.query_selector(self.str_pattern)
-        if result is None or not await result.is_visible():
-            return None
-        return html.fromstring(await result.evaluate('element => element.outerHTML'), parser=etree.HTMLParser(remove_comments=True))
+        return await _find(self.str_pattern, raw_page_data)
 
     async def findall(self, raw_page_data: RawPageData) -> list[html.HtmlElement]:
-        find_result = await raw_page_data.page.query_selector_all(self.str_pattern)
-        result = []
-        for element in find_result:
-            if await element.is_visible():
-                result.append(html.fromstring(await element.evaluate('element => element.outerHTML'), parser=etree.HTMLParser(remove_comments=True)))
-        return result
+        return await _findall(self.str_pattern, raw_page_data)
 
 
 class PlaywrightClickRule:

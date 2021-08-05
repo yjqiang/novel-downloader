@@ -2,8 +2,8 @@ from loader.playwright_loaders import PlaywrightBodyPageLoader, PlaywrightIndexP
 from loader.aiohttp_loaders import AiohttpBodyPageLoader, AiohttpIndexPageLoader
 import playwright_websession
 import aiohttp_websession
-from parse_rule.aiohttp_low_rules import AiohttpLxmlHtmlElementRule, BodyPageContentAiohttpLxmlHtmlElementRule
-from parse_rule.playwright_low_rules import PlaywrightLxmlHtmlElementRule, BodyPageContentPlaywrightLxmlHtmlElementRule, PlaywrightClickRule
+from parse_rule.aiohttp_low_rules import LxmlCssHtmlElementRule, BodyPageContentLxmlCssHtmlElementRule
+from parse_rule.playwright_low_rules import PlaywrightHtmlElementRule, BodyPageContentPlaywrightHtmlElementRule, PlaywrightClickRule
 
 body_page_loaders = {
     'playwright': PlaywrightBodyPageLoader,
@@ -22,9 +22,9 @@ web_sessions = {
 
 
 low_rules = {
-    'AiohttpLxmlHtmlElementRule': AiohttpLxmlHtmlElementRule,
-    'BodyPageContentAiohttpLxmlHtmlElementRule': BodyPageContentAiohttpLxmlHtmlElementRule,
-    'PlaywrightLxmlHtmlElementRule': PlaywrightLxmlHtmlElementRule,
-    'BodyPageContentPlaywrightLxmlHtmlElementRule': BodyPageContentPlaywrightLxmlHtmlElementRule,
+    'LxmlCssHtmlElementRule': LxmlCssHtmlElementRule,
+    'BodyPageContentLxmlCssHtmlElementRule': BodyPageContentLxmlCssHtmlElementRule,
+    'PlaywrightHtmlElementRule': PlaywrightHtmlElementRule,
+    'BodyPageContentPlaywrightHtmlElementRule': BodyPageContentPlaywrightHtmlElementRule,
     'PlaywrightClickRule': PlaywrightClickRule
 }

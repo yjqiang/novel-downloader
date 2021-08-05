@@ -5,10 +5,6 @@ from typing import Tuple, Optional, Union
 # from lxml import cssselect, etree, html
 from playwright.async_api import async_playwright, Page, ElementHandle
 
-import log
-
-log.init()
-
 
 class WebSession:
     __slots__ = ('main_pages', 'context', 'browser',)

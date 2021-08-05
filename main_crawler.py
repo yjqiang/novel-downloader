@@ -14,7 +14,7 @@ async def main():
 
     url = 'https://www.xbookcn.com/book/chest/1.htm'
     url = 'http://m.haohengwx.com/16/16248/177341.html'
-    # url = 'http://www.hejixs.com/113/113311/7150266_2.html'
+    url = 'http://www.hejixs.com/113/113311/7150266_2.html'
     rule = rules[urlparse(url).netloc]
 
     session = dict_str_class.web_sessions[rule.all_rules_of_1_website['body_page']['loader']]()

@@ -10,17 +10,17 @@
         loader = 'aiohttp'
 
     [websites.body_page.title]
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = 'div[class=title_page]'
         kwargs.attributes = [['_get_text'],]  # 详见 parse_rule/lower_rule.LxmlCssSelectorRule
 
     [[websites.body_page.content]]
-        type = 'BodyPageContentAiohttpLxmlHtmlElementRule'
+        type = 'BodyPageContentLxmlCssHtmlElementRule'
         kwargs.str_pattern = "div[class=content] > p"
         kwargs.attributes = [['_get_content'],]
 
     [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = 'a[href=index\.htm] + a'
         kwargs.attributes = [['_get_attribute', 'href']]
 
@@ -30,12 +30,12 @@
         loader = 'aiohttp'
 
     [[websites.index_page.content]]  # 与正文页面统一
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = "div[class=TitleLinks] div[class=content] > a"
         kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
 
     [[websites.index_page.next_page_url]]  # 与正文页面统一
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = 'none[class=none]'  # 随便写的，这里没有下一页
         kwargs.attributes = []
 
@@ -47,12 +47,12 @@
         loader = 'playwright'
 
     [websites.body_page.title]
-        type = 'PlaywrightLxmlHtmlElementRule'
+        type = 'PlaywrightHtmlElementRule'
         kwargs.str_pattern = 'h1[id=chaptertitle]'
         kwargs.attributes = [['_get_text'],]
 
     [[websites.body_page.content]]
-        type = 'BodyPageContentPlaywrightLxmlHtmlElementRule'
+        type = 'BodyPageContentPlaywrightHtmlElementRule'
         kwargs.str_pattern = "div[class=articlecontent] > div > p"
         kwargs.attributes = [['_get_content_with_img', 'img', 'src'],]
 
@@ -60,7 +60,7 @@
         try_combine_fake_paragraphs = true  # 不少小说网站乱切分自然段，这里根据每个“自然段”最后一个 word 尝试进行合并
 
     [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
-        type = 'PlaywrightLxmlHtmlElementRule'
+        type = 'PlaywrightHtmlElementRule'
         kwargs.str_pattern = 'ul > li:nth-child(4) > a[href$=html]'
         kwargs.attributes = [['_get_attribute', 'href']]
 
@@ -69,12 +69,12 @@
         loader = 'aiohttp'
 
     [[websites.index_page.content]]  # 与正文页面统一
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = "ul[class=chapters] > li > a"
         kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
 
     [[websites.index_page.next_page_url]]  # 与正文页面统一
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = 'div[class=page] > a:nth-last-child(2)'
         kwargs.attributes = [['_get_attribute', 'href']]
 
@@ -87,12 +87,12 @@
         loader = 'playwright'
 
     [websites.body_page.title]
-        type = 'PlaywrightLxmlHtmlElementRule'
+        type = 'PlaywrightHtmlElementRule'
         kwargs.str_pattern = 'h1[class=page-title]'
         kwargs.attributes = [['_get_text'],]
 
     [[websites.body_page.content]]
-        type = 'BodyPageContentPlaywrightLxmlHtmlElementRule'
+        type = 'BodyPageContentPlaywrightHtmlElementRule'
         kwargs.str_pattern = "div[id=content] > div > p"
         kwargs.attributes = [['_get_content_with_img', 'img', 'src'],]
 
@@ -100,11 +100,11 @@
         try_combine_fake_paragraphs = true  # 不少小说网站乱切分自然段，这里根据每个“自然段”最后一个 word 尝试进行合并
 
     [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
-        type = 'PlaywrightLxmlHtmlElementRule'
+        type = 'PlaywrightHtmlElementRule'
         kwargs.str_pattern = 'center[class=chapterPages] > a[class=curr] + a'
         kwargs.attributes = [['_get_attribute', 'href']]
     [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
-        type = 'PlaywrightLxmlHtmlElementRule'
+        type = 'PlaywrightHtmlElementRule'
         kwargs.str_pattern = 'a[class=next]'
         kwargs.attributes = [['_get_attribute', 'href']]
 
@@ -113,7 +113,7 @@
         loader = 'playwright'
 
     [[websites.index_page.content]]  # 与正文页面统一
-        type = 'PlaywrightLxmlHtmlElementRule'
+        type = 'PlaywrightHtmlElementRule'
         kwargs.str_pattern = "div[class=container] > div:nth-child(9)  li > a"
         kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
 
@@ -130,17 +130,17 @@
         loader = 'aiohttp'
 
     [websites.body_page.title]
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = 'h1[id=nr_title]'
         kwargs.attributes = [['_get_text'],]
 
     [[websites.body_page.content]]
-        type = 'BodyPageContentAiohttpLxmlHtmlElementRule'
+        type = 'BodyPageContentLxmlCssHtmlElementRule'
         kwargs.str_pattern = "div[id=nr1]"
         kwargs.attributes = [['_get_content'],]
 
     [[websites.body_page.next_page_url]]
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = 'li[class=next] > a'
         kwargs.attributes = [['_get_attribute', 'href']]
 
@@ -149,11 +149,11 @@
         loader = 'aiohttp'
 
     [[websites.index_page.content]]  # 与正文页面统一
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = "div[class^=book-list]  li > a"
         kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
 
     [[websites.index_page.next_page_url]]  # 与正文页面统一
-        type = 'AiohttpLxmlHtmlElementRule'
+        type = 'LxmlCssHtmlElementRule'
         kwargs.str_pattern = 'none[class=none]'  # 随便写的，这里没有下一页
         kwargs.attributes = []
