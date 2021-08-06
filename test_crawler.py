@@ -53,7 +53,7 @@ async def main():
     print('#################################################################################################')
 
     url = 'https://www.xbookcn.com/book/chest/index.htm'
-    # url = 'http://m.haohengwx.com/16/16248/'
+    # url = 'http://m.haohengwx.com/16/16248_6/'
     # url = 'http://www.hejixs.com/113/113311_1/'
     # url = 'https://www.kunnu.com/zichuan/'
     rule: WebsiteRule = rules[urlparse(url).netloc]

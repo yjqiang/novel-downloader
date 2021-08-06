@@ -74,8 +74,8 @@
         kwargs.attributes = [['_get_attribute', 'href'], ['_get_text']]
 
     [[websites.index_page.next_page_url]]  # 与正文页面统一
-        type = 'LxmlCssElementRule'
-        kwargs.str_pattern = 'div[class=page] > a:nth-last-child(2)'
+        type = 'LxmlXpathElementRule'
+        kwargs.str_pattern = '//div[@class="page"]/a[contains(text(), "下一")]'
         kwargs.attributes = [['_get_attribute', 'href']]
 
 

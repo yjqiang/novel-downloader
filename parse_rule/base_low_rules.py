@@ -1,3 +1,4 @@
+import abc
 from typing import Optional, Any, Union
 
 from my_dataclass.base_page import RawPageData
@@ -9,6 +10,8 @@ class ElementRule:
     """
     对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 etree_Element） 再处理，获得 element 的 text 或者 attribute 值等
     """
+    __metaclass__ = abc.ABCMeta
+
     def __init__(self, str_pattern: str, attributes: list[list[str]]):
         """
 
@@ -26,9 +29,11 @@ class ElementRule:
     async def _get_text(root: etree_Element) -> str:
         return root.text
 
+    @abc.abstractmethod
     async def find(self, raw_page_data: RawPageData) -> Optional[etree_Element]:
         pass
 
+    @abc.abstractmethod
     async def findall(self, raw_page_data: RawPageData) -> list[etree_Element]:
         pass
 
@@ -56,6 +61,8 @@ class BodyPageContentElementRule:
     对 find 或者 findall 的搜索结果（还是比较粗糙的；元素 type 为 etree_Element） 再处理，获得 element 的 text 或者 attribute 值等；这是专门为正文提取配备的
     正文提取的关键在于把所有的 tag 的 text 全部提取出来
     """
+    __metaclass__ = abc.ABCMeta
+
     def __init__(self, str_pattern: str, attributes: list[list[str]]):
         """
 
@@ -156,6 +163,7 @@ class BodyPageContentElementRule:
 
         return new_paragraphs
 
+    @abc.abstractmethod
     async def findall(self, raw_page_data: RawPageData) -> list[etree_Element]:
         pass
 
