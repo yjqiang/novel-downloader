@@ -2,8 +2,7 @@
     netloc = "www.xbookcn.com"
 
     # 空 就是 None
-    # encoding = "big5"
-    traditional2simplified_chinese = true
+    encoding = "big5"
 
     # body_page 是正文获取规则
     [websites.body_page]
@@ -18,6 +17,9 @@
         type = 'BodyPageContentLxmlCssElementRule'
         kwargs.str_pattern = "div[class=content] > p"
         kwargs.attributes = [['_get_content'],]
+
+    [websites.body_page.content_other_settings]
+        traditional2simplified_chinese = true
 
     [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
         type = 'LxmlCssElementRule'
@@ -61,7 +63,11 @@
 
     [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
         type = 'PlaywrightElementRule'
-        kwargs.str_pattern = 'ul > li:nth-child(4) > a[href$=html]'
+        kwargs.str_pattern = '//ul/li[position()=4]/a[substring(@href, string-length(@href) - 3) = "html"][contains(text(), "下一页")]'
+        kwargs.attributes = [['_get_attribute', 'href']]
+    [[websites.body_page.next_page_url]]  # 原因是有的网站不光有下一章，还有下一页（更细粒度）
+        type = 'PlaywrightElementRule'
+        kwargs.str_pattern = '//ul/li[position()=4]/a[substring(@href, string-length(@href) - 3) = "html"][contains(text(), "下一章")]'
         kwargs.attributes = [['_get_attribute', 'href']]
 
 

@@ -2,6 +2,8 @@ from typing import Union
 
 from lxml import etree
 
+from utils import etree_Element
+
 
 class ContentWords:
     """
@@ -21,7 +23,7 @@ class ContentWords:
             }
         }
 
-    def to_html(self) -> etree._Element:
+    def to_html(self) -> etree_Element:
         root = etree.Element("div")
         root.text = self.words
         return root
@@ -46,7 +48,7 @@ class ContentImage:
             }
         }
 
-    def to_html(self) -> etree._Element:
+    def to_html(self) -> etree_Element:
         root = etree.Element("img")
         root.set('src', self.url)
         return root
@@ -70,7 +72,7 @@ class ContentParagraph:
     def to_json(self) -> list[dict]:
         return [element.to_json() for element in self.value]
 
-    def to_html(self) -> etree._Element:
+    def to_html(self) -> etree_Element:
         root = etree.Element("p")
         root.text = '　　'
         last_tag = root  # 存放 text
@@ -88,4 +90,10 @@ class ContentParagraph:
 
     @staticmethod
     def from_json(json_data: list[dict]) -> 'ContentParagraph':
+        """
+        输入是一个自然段！
+        这个自然段被分成了几个 piece，每个 piece 可以是 ContentWords 或者 ContentImage
+        :param json_data:
+        :return:
+        """
         return ContentParagraph([ContentParagraph.DICT_TYPE_CLASS[element['type']](**element['data']) for element in json_data])

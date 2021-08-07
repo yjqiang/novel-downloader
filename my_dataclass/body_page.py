@@ -1,3 +1,6 @@
+"""
+正文页
+"""
 from typing import Union
 
 from playwright.async_api import ElementHandle
@@ -18,4 +21,4 @@ class BodyPageData(PageData):
         super().__init__(url, page_id)
 
         self.title = None
-        self.content = None
+        self.content = None  # list[paragraph]

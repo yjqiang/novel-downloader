@@ -20,9 +20,12 @@ async def _fetch_html(session: aiohttp_websession.WebSession, website_setting_ru
 
 async def _get_next_page_url(page_rule: PageRule, page_data: PageData) -> None:
     next_page_url_rules = page_rule.next_page_url_rules
-    for next_page_url_rule in next_page_url_rules:
+    for next_page_url_level, next_page_url_rule in enumerate(next_page_url_rules, start=1-len(next_page_url_rules)):
         result = await next_page_url_rule.find_attr(page_data.raw_page_data)
         if result is not None:
+            # 0 表示最后一层（例如：下一章），-1 表示倒数第二层（例如：下一页）
+            page_data.next_page_url_level = next_page_url_level
+
             link = result[0]
             page_data.next_page_url = urljoin(page_data.url, link)
             return
@@ -36,31 +39,31 @@ async def _goto_next_page(session: aiohttp_websession.WebSession, website_settin
 
 class AiohttpBodyPageLoader(BodyPageLoader):
     @staticmethod
-    async def fetch_html(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, body_page: BodyPageData) -> None:
-        return await _fetch_html(session, website_setting_rule, body_page)
+    async def fetch_html(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, page_data: BodyPageData) -> None:
+        return await _fetch_html(session, website_setting_rule, page_data)
 
     @staticmethod
-    async def get_next_page_url(body_page_rule: BodyPageRule, body_page: BodyPageData) -> None:
-        return await _get_next_page_url(body_page_rule, body_page)
+    async def get_next_page_url(page_rule: BodyPageRule, page_data: BodyPageData) -> None:
+        return await _get_next_page_url(page_rule, page_data)
 
     @staticmethod
-    async def goto_next_page(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, cur_body_page: BodyPageData) -> BodyPageData:
-        next_page_data = BodyPageData(url=cur_body_page.next_page_url, page_id=cur_body_page.page_id + 1)
-        await _goto_next_page(session, website_setting_rule, cur_body_page, next_page_data, AiohttpBodyPageLoader.fetch_html)
+    async def goto_next_page(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, cur_page_data: BodyPageData) -> BodyPageData:
+        next_page_data = BodyPageData(url=cur_page_data.next_page_url, page_id=cur_page_data.page_id + 1)
+        await _goto_next_page(session, website_setting_rule, cur_page_data, next_page_data, AiohttpBodyPageLoader.fetch_html)
         return next_page_data
 
 
 class AiohttpIndexPageLoader(IndexPageLoader):
     @staticmethod
-    async def fetch_html(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, index_page: IndexPageData) -> None:
-        return await _fetch_html(session, website_setting_rule, index_page)
+    async def fetch_html(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, page_data: IndexPageData) -> None:
+        return await _fetch_html(session, website_setting_rule, page_data)
 
     @staticmethod
-    async def get_next_page_url(index_page_rule: IndexPageRule, index_page: IndexPageData) -> None:
-        return await _get_next_page_url(index_page_rule, index_page)
+    async def get_next_page_url(page_rule: IndexPageRule, page_data: IndexPageData) -> None:
+        return await _get_next_page_url(page_rule, page_data)
 
     @staticmethod
-    async def goto_next_page(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, cur_index_page: IndexPageData) -> IndexPageData:
-        next_page_data = IndexPageData(url=cur_index_page.next_page_url, page_id=cur_index_page.page_id + 1)
-        await _goto_next_page(session, website_setting_rule, cur_index_page, next_page_data, AiohttpIndexPageLoader.fetch_html)
+    async def goto_next_page(session: aiohttp_websession.WebSession, website_setting_rule: WebsiteSettingRule, cur_page_data: IndexPageData) -> IndexPageData:
+        next_page_data = IndexPageData(url=cur_page_data.next_page_url, page_id=cur_page_data.page_id + 1)
+        await _goto_next_page(session, website_setting_rule, cur_page_data, next_page_data, AiohttpIndexPageLoader.fetch_html)
         return next_page_data

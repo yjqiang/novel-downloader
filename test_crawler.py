@@ -13,7 +13,7 @@ async def main():
 
     url = 'https://www.xbookcn.com/book/chest/1.htm'
     # url = 'http://m.haohengwx.com/16/16248/177341.html'
-    # url = 'http://www.hejixs.com/113/113311/7150270.html'
+    # url = 'http://www.hejixs.com/113/113311/7150266.html'
     # url = 'https://www.kunnu.com/zichuan/46250.htm'
     rule: WebsiteRule = rules[urlparse(url).netloc]
 
@@ -21,24 +21,24 @@ async def main():
     await session.init()
 
     body_page_data = BodyPageData(url, page_id=0)
-    BodyPageLoader = dict_str_class.body_page_loaders[rule.all_rules_of_1_website['body_page']['loader']]
-    await BodyPageLoader.fetch_html(session, rule.website_setting_rule, body_page_data)
+    class_body_page_loader = dict_str_class.body_page_loaders[rule.all_rules_of_1_website['body_page']['loader']]
+    await class_body_page_loader.fetch_html(session, rule.website_setting_rule, body_page_data)
     while True:
         print('>>>')
         print(f'{body_page_data.url=}')
         print(f'{body_page_data.raw_page_data.encoding=}')
-        await BodyPageLoader.get_title(body_page=body_page_data, body_page_rule=rule.body_page_rule)
+        await class_body_page_loader.get_title(page_data=body_page_data, page_rule=rule.body_page_rule)
         print(f'{body_page_data.title=}')
-        await BodyPageLoader.get_content(body_page=body_page_data, body_page_rule=rule.body_page_rule)
+        await class_body_page_loader.get_content(page_data=body_page_data, page_rule=rule.body_page_rule)
         print(f'{[str(paragraph) for paragraph in body_page_data.content]=}')
-        await BodyPageLoader.get_next_page_url(body_page=body_page_data, body_page_rule=rule.body_page_rule)
+        await class_body_page_loader.get_next_page_url(page_data=body_page_data, page_rule=rule.body_page_rule)
         print(f'{body_page_data.next_page_url=}')
 
         if body_page_data.next_page_url is None:
             break
 
         # 下一页的 page
-        next_body_page_data = await BodyPageLoader.goto_next_page(session=session, website_setting_rule=rule.website_setting_rule, cur_body_page=body_page_data)  # 跳到下一页
+        next_body_page_data = await class_body_page_loader.goto_next_page(session=session, website_setting_rule=rule.website_setting_rule, cur_page_data=body_page_data)  # 跳到下一页
         print(f'{body_page_data.url} => {next_body_page_data.url}')
         if body_page_data.next_page_url == body_page_data.url:  # 有的网站仅仅会一直重复最后页
             break
@@ -62,22 +62,22 @@ async def main():
     await session.init()
 
     index_page_data = IndexPageData(url, page_id=0)
-    IndexPageLoader = dict_str_class.index_page_loaders[rule.all_rules_of_1_website['index_page']['loader']]
-    await IndexPageLoader.fetch_html(session, rule.website_setting_rule, index_page_data)
+    class_index_page_loader = dict_str_class.index_page_loaders[rule.all_rules_of_1_website['index_page']['loader']]
+    await class_index_page_loader.fetch_html(session, rule.website_setting_rule, index_page_data)
     while True:
         print('>>>')
         print(f'{index_page_data.url=}')
         print(f'{index_page_data.raw_page_data.encoding=}')
-        await IndexPageLoader.get_content(index_page=index_page_data, index_page_rule=rule.index_page_rule)
+        await class_index_page_loader.get_content(page_data=index_page_data, page_rule=rule.index_page_rule)
         print(f'{[(url, chapter_name) for url, chapter_name in zip(index_page_data.urls, index_page_data.chapters_names)]=}')
-        await IndexPageLoader.get_next_page_url(index_page=index_page_data, index_page_rule=rule.index_page_rule)
+        await class_index_page_loader.get_next_page_url(page_data=index_page_data, page_rule=rule.index_page_rule)
         print(f'{index_page_data.next_page_url=}')
 
         if index_page_data.next_page_url is None:
             break
 
         # 下一页的 page
-        next_index_page_data = await IndexPageLoader.goto_next_page(session=session, website_setting_rule=rule.website_setting_rule, cur_index_page=index_page_data)  # 跳到下一页
+        next_index_page_data = await class_index_page_loader.goto_next_page(session=session, website_setting_rule=rule.website_setting_rule, cur_page_data=index_page_data)  # 跳到下一页
         print(f'{index_page_data.url} => {next_index_page_data.url=}')
         if index_page_data.next_page_url == index_page_data.url:  # 有的网站仅仅会一直重复最后页
             break

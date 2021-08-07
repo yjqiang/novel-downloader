@@ -34,5 +34,6 @@ class PageData:
         # 参考 playwright_low_rules.PlaywrightClickRule，例如有的下一页没有显式的跳转 url，只有 click 了才知道
         # 所以可能是 str_url 或者仅仅是个 ElementHandle 等待点击
         self.next_page_url: Optional[Union[str, ElementHandle]] = None
+        self.next_page_url_level: int = 1  # 0 表示最后一层（例如：下一章），-1 表示倒数第二层（例如：下一页）
 
         self.raw_page_data = RawPageData()
