@@ -23,23 +23,23 @@ def is_fake_paragraph(last_word: str):
     return RE.fullmatch(last_word) or last_word in (',', '，', '、')
 
 
-def save_json(path: str, data: Any) -> None:
-    with open(path, 'w+', encoding='utf8') as f:
+def save_json(path: str, data: Any, encoding: str = 'utf-8') -> None:
+    with open(path, 'w+', encoding=encoding) as f:
         f.write(json.dumps(data, indent=4))
 
 
-def open_json(path: str) -> Any:
-    with open(path, encoding='utf8') as f:
+def open_json(path: str, encoding: str = 'utf-8') -> Any:
+    with open(path, encoding=encoding) as f:
         return json.load(f)
 
 
-def toml_load(path: str):
-    with open(path, encoding="utf-8") as f:
+def toml_load(path: str, encoding: str = 'utf-8'):
+    with open(path, encoding=encoding) as f:
         return toml.load(f)
 
 
-def toml_dump(anything: Any, path):
-    with open(path, 'w', encoding="utf-8") as f:
+def toml_dump(anything: Any, path: str, encoding: str = 'utf-8') -> None:
+    with open(path, 'w', encoding=encoding) as f:
         toml.dump(anything, f)
 
 
@@ -47,4 +47,4 @@ def traditional2simplified_chinese(words: str) -> str:
     return T2S_CONVERTER.convert(words)
 
 
-etree_Element = _Element  #
+etree_Element = _Element  # 这货是非 public 的，不知道 lxml 咋整的。。。
